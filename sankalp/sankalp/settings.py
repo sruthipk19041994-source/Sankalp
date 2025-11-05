@@ -161,3 +161,4 @@ CRONJOBS = [
     ('0 9 * * *', 'women_support.cron.send_campaign_reminders_cron'),  
     # runs daily at 9 AM
 ]
+ALLOWED_HOSTS = ['sruthi123.pythonanywhere.com', '127.0.0.1', 'localhost']

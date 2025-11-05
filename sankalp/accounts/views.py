@@ -266,6 +266,9 @@ class DashboardView(LoginRequiredMixin, View):
                 'questions': WomenSupportQuestion.objects.all().order_by('-created_at'),
             }
             return render(request, 'accounts/supporter_dashboard.html', context)
+    # 🔹 Fallback for undefined or missing role
+        messages.error(request, "⚠️ Dashboard not available for your role. Contact admin.")
+        return redirect('home')  # or any safe page
 
 
 # 🌈 Admin — Manage Users
@@ -315,6 +318,5 @@ class AdminCampaignManagementView(LoginRequiredMixin, View):
             'education_campaigns': EducationRequest.objects.all(),
             'medical_campaigns': MedicalCampRequest.objects.all(),
             'legal_campaigns': LegalAwarenessCamp.objects.all(),
-            'women_campaigns': WomenSupportCampaign.objects.all(),
-        }
+             'women_support_campaigns': WomenSupportCampaign.objects.all(),        }
         return render(request, 'accounts/admin_campaigns.html', context)

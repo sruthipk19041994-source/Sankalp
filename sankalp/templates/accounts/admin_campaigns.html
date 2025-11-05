@@ -9,117 +9,178 @@
     <hr class="w-25 mx-auto">
   </div>
 
-  <!-- Tabs -->
-  <ul class="nav nav-tabs mb-4" id="campaignTabs" role="tablist">
-    <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#education" role="tab">🎓 Education</a></li>
-    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#medical" role="tab">🏥 Medical</a></li>
-    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#legal" role="tab">⚖️ Legal</a></li>
-    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#women" role="tab">🌸 Women Support</a></li>
-  </ul>
-
-  <div class="tab-content">
-
-    <!-- 🎓 Education -->
-    <div class="tab-pane fade show active" id="education" role="tabpanel">
-      <div class="card shadow-sm border-0">
-        <div class="card-body">
-          <h5 class="fw-bold text-primary mb-3">🎓 Education Requests</h5>
-          {% if education_campaigns %}
-          <div class="table-responsive">
-            <table class="table table-striped align-middle">
-              <thead class="table-light">
-                <tr>
-                  <th>ID</th>
-                  <th>Beneficiary</th>
-                  <th>Status</th>
-                  <th>Forwarded To</th>
-                  <th>Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for edu in education_campaigns %}
-                <tr>
-                  <td>{{ edu.id }}</td>
-                  <td>{{ edu.beneficiary }}</td>
-                  <td>
-                    <span class="badge 
-                      {% if edu.status == 'Pending' %}bg-warning
-                      {% elif edu.status == 'Approved' %}bg-success
-                      {% elif edu.status == 'Rejected' %}bg-danger
-                      {% else %}bg-info{% endif %}">{{ edu.status }}</span>
-                  </td>
-                  <td>{{ edu.forwarded_to|default:"—" }}</td>
-                  <td>{{ edu.created_at|date:"d M Y" }}</td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-          {% else %}
-          <p class="text-muted">No education campaigns available.</p>
-          {% endif %}
-        </div>
+  <!-- 🎓 Education -->
+  <div class="card shadow-sm border-0 mb-4">
+    <div class="card-body">
+      <h5 class="fw-bold text-primary mb-3">🎓 Education Requests</h5>
+      {% if education_campaigns %}
+      <div class="table-responsive">
+        <table class="table table-striped align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>ID</th>
+              <th>Beneficiary</th>
+              <th>Status</th>
+              <th>Forwarded To</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for edu in education_campaigns %}
+            <tr>
+              <td>{{ edu.id }}</td>
+              <td>{{ edu.beneficiary }}</td>
+              <td>
+                <span class="badge 
+                  {% if edu.status == 'Pending' %}bg-warning
+                  {% elif edu.status == 'Approved' %}bg-success
+                  {% elif edu.status == 'Rejected' %}bg-danger
+                  {% else %}bg-info{% endif %}">{{ edu.status }}</span>
+              </td>
+              <td>{{ edu.forwarded_to|default:"—" }}</td>
+              <td>{{ edu.created_at|date:"d M Y" }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
       </div>
+      {% else %}
+      <p class="text-muted">No education campaigns available.</p>
+      {% endif %}
     </div>
+  </div>
 
-    <!-- 🏥 Medical -->
-    <div class="tab-pane fade" id="medical" role="tabpanel">
-      <div class="card shadow-sm border-0">
-        <div class="card-body">
-          <div class="d-flex justify-content-between align-items-center mb-3">
-            <h5 class="fw-bold text-primary">🏥 Medical Camp Requests</h5>
-            <a href="{% url 'volunteer_medical_list' %}" class="btn btn-sm btn-gradient">👀 View Scheduled Camps</a>
-          </div>
-
-          {% if medical_campaigns %}
-          <div class="table-responsive">
-            <table class="table table-striped align-middle">
-              <thead class="table-light">
-                <tr>
-                  <th>Hospital</th>
-                  <th>Location</th>
-                  <th>Date</th>
-                  <th>Volunteer</th>
-                  <th>Status</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for camp in medical_campaigns %}
-                <tr>
-                  <td>{{ camp.hospital.name }}</td>
-                  <td>{{ camp.location }}</td>
-                  <td>{{ camp.date|date:"M d, Y" }}</td>
-                  <td>{{ camp.volunteer.username }}</td>
-                  <td>
-                    <span class="badge 
-                      {% if camp.approval_status == 'Pending' %}bg-warning text-dark
-                      {% elif camp.approval_status == 'Approved' %}bg-success
-                      {% elif camp.approval_status == 'Rejected' %}bg-danger
-                      {% elif camp.approval_status == 'Scheduled' %}bg-info text-dark
-                      {% endif %}">
-                      {{ camp.approval_status }}
-                    </span>
-                  </td>
-                  <td>
-                    {% if camp.approval_status in 'Approved Scheduled' %}
-                    <a href="{% url 'schedule_medical_campaign' camp.id %}" class="btn btn-sm btn-outline-primary">
-                      📅 {% if camp.scheduled_date %}Reschedule{% else %}Schedule{% endif %}
-                    </a>
-                    {% else %}
-                    <span class="text-muted">—</span>
-                    {% endif %}
-                  </td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-          {% else %}
-          <p class="text-muted">No medical camp requests available.</p>
-          {% endif %}
-        </div>
+  <!-- 🏥 Medical -->
+  <div class="card shadow-sm border-0 mb-4">
+    <div class="card-body">
+      <h5 class="fw-bold text-primary mb-3">🏥 Medical Camp Requests</h5>
+      {% if medical_campaigns %}
+      <div class="table-responsive">
+        <table class="table table-striped align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>Hospital</th>
+              <th>Location</th>
+              <th>Date</th>
+              <th>Volunteer</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for camp in medical_campaigns %}
+            <tr>
+              <td>{{ camp.hospital.name }}</td>
+              <td>{{ camp.location }}</td>
+              <td>{{ camp.date|date:"M d, Y" }}</td>
+              <td>{{ camp.volunteer.username }}</td>
+              <td>
+                <span class="badge 
+                  {% if camp.approval_status == 'Pending' %}bg-warning text-dark
+                  {% elif camp.approval_status == 'Approved' %}bg-success
+                  {% elif camp.approval_status == 'Rejected' %}bg-danger
+                  {% elif camp.approval_status == 'Scheduled' %}bg-info text-dark
+                  {% endif %}">{{ camp.approval_status }}</span>
+              </td>
+              <td>
+                {% if camp.approval_status in 'Approved Scheduled' %}
+                <a href="{% url 'medical_info' %}" class="btn btn-sm btn-outline-primary">
+                  📅 {% if camp.scheduled_date %}Reschedule{% else %}Schedule{% endif %}
+                </a>
+                {% else %}
+                <span class="text-muted">—</span>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
       </div>
+      {% else %}
+      <p class="text-muted">No medical camp requests available.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- ⚖️ Legal -->
+  <div class="card shadow-sm border-0 mb-4">
+    <div class="card-body">
+      <h5 class="fw-bold text-primary mb-3">⚖️ Legal Requests</h5>
+      {% if legal_campaigns %}
+      <div class="table-responsive">
+        <table class="table table-striped align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>Title</th>
+              <th>Beneficiary</th>
+              <th>Lawyer Assigned</th>
+              <th>Status</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for legal in legal_campaigns %}
+            <tr>
+              <td>{{ legal.title }}</td>
+              <td>{{ legal.beneficiary }}</td>
+              <td>{{ legal.lawyer.username|default:"—" }}</td>
+              <td>
+                <span class="badge 
+                  {% if legal.status == 'Pending' %}bg-warning text-dark
+                  {% elif legal.status == 'Approved' %}bg-success
+                  {% elif legal.status == 'Rejected' %}bg-danger
+                  {% else %}bg-info text-dark{% endif %}">{{ legal.status }}</span>
+              </td>
+              <td>{{ legal.created_at|date:"d M Y" }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <p class="text-muted">No legal campaigns available.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- 🌸 Women Support -->
+  <div class="card shadow-sm border-0 mb-4">
+    <div class="card-body">
+      <h5 class="fw-bold text-primary mb-3">🌸 Women Support Requests</h5>
+      {% if women_support_campaigns %}
+      <div class="table-responsive">
+        <table class="table table-striped align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>Title</th>
+              <th>Beneficiary</th>
+              <th>Volunteer</th>
+              <th>Status</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for ws in women_support_campaigns %}
+            <tr>
+              <td>{{ ws.title }}</td>
+              <td>{{ ws.beneficiary }}</td>
+              <td>{{ ws.volunteer.username|default:"—" }}</td>
+              <td>
+                <span class="badge 
+                  {% if ws.status == 'Pending' %}bg-warning text-dark
+                  {% elif ws.status == 'Approved' %}bg-success
+                  {% elif ws.status == 'Rejected' %}bg-danger
+                  {% else %}bg-info text-dark{% endif %}">{{ ws.status }}</span>
+              </td>
+              <td>{{ ws.created_at|date:"d M Y" }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <p class="text-muted">No women support campaigns available.</p>
+      {% endif %}
     </div>
   </div>
 </div>
