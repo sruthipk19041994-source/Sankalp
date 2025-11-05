@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Reply Question{% endblock %}
+{% block content %}
+<div class="container mt-5">
+  <h2 class="text-center text-danger fw-bold mb-4">💬 Reply to Question</h2>
+  <div class="card p-4 shadow-sm mb-4">
+    <strong>Question:</strong> {{ question.question }}
+  </div>
+  <form method="post" action="{% url 'reply_question' question.id %}" class="shadow p-4 rounded bg-light">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <div class="text-center mt-3">
+      <button type="submit" class="btn btn-danger">Submit Answer</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

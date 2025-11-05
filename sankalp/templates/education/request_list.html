@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}All Education Requests - Sankalp{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="text-center fw-bold text-primary mb-4">📜 Education Request List</h2>
+  <hr class="w-25 mx-auto mb-4">
+
+  {% if requests %}
+    {% for req in requests %}
+    <div class="card shadow-sm mb-4 p-3">
+      <h5 class="fw-bold">{{ req.subject }}</h5>
+      <p><strong>Beneficiary:</strong> {{ req.beneficiary.username }}</p>
+      <p><strong>Description:</strong> {{ req.description|truncatechars:200 }}</p>
+      <p><strong>Status:</strong>
+        {% if req.status == 'Pending' %}
+          <span class="badge bg-warning text-dark">Pending</span>
+        {% elif req.status == 'Approved' %}
+          <span class="badge bg-success">Approved</span>
+        {% elif req.status == 'Rejected' %}
+          <span class="badge bg-danger">Rejected</span>
+        {% endif %}
+      </p>
+      <a href="{% url 'volunteer_contact_donor' req.id %}" class="btn btn-sm btn-outline-primary mt-2">✉️ Contact Donor</a>
+    </div>
+    {% endfor %}
+  {% else %}
+    <p class="text-center text-muted">No requests available.</p>
+  {% endif %}
+</div>
+{% endblock %}

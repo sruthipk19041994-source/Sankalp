@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}Edit User – {{ user.username }}{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <div class="col-md-6 mx-auto shadow p-4 rounded bg-white">
+    <h4 class="fw-bold text-primary mb-3 text-center">✏️ Edit User – {{ user.username }}</h4>
+    <form method="POST">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Username</label>
+        <input type="text" name="username" class="form-control" value="{{ user.username }}" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Email</label>
+        <input type="email" name="email" class="form-control" value="{{ user.email }}" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Role</label>
+        <select name="role" class="form-select" required>
+          <option value="Volunteer" {% if user.role == 'Volunteer' %}selected{% endif %}>Volunteer</option>
+          <option value="Donor" {% if user.role == 'Donor' %}selected{% endif %}>Donor</option>
+          <option value="Beneficiary" {% if user.role == 'Beneficiary' %}selected{% endif %}>Beneficiary</option>
+          <option value="Admin" {% if user.role == 'Admin' %}selected{% endif %}>Admin</option>
+        </select>
+      </div>
+
+      <div class="d-flex justify-content-between">
+        <a href="{% url 'admin_user_management' %}" class="btn btn-secondary">Cancel</a>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

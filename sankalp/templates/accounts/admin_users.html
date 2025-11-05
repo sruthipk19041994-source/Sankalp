@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %}Admin – User Management{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <h2 class="fw-bold text-center text-primary mb-3">👥 User Management</h2>
+  <p class="text-center text-muted mb-4">
+    View and manage registered users — volunteers, donors, and beneficiaries.
+  </p>
+  <hr class="w-50 mx-auto mb-4">
+
+  {% if users %}
+  <div class="table-responsive shadow-sm rounded">
+    <table class="table table-hover align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>#</th>
+          <th>Full Name</th>
+          <th>Username</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Date Joined</th>
+          <th class="text-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in users %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          <td>{{ user.profile.full_name|default:user.username }}</td>
+          <td>{{ user.username }}</td>
+          <td>{{ user.email }}</td>
+          <td>
+            <span class="badge 
+              {% if user.role == 'Volunteer' %} bg-info 
+              {% elif user.role == 'Donor' %} bg-success 
+              {% elif user.role == 'Beneficiary' %} bg-warning 
+              {% else %} bg-secondary {% endif %}">
+              {{ user.role }}
+            </span>
+          </td>
+          <td>{{ user.date_joined|date:"M d, Y" }}</td>
+<td class="text-center">
+  <div class="btn-group">
+    <a href="{% url 'admin_user_edit' user.id %}" class="btn btn-sm btn-outline-primary">Edit</a>
+
+    <form method="POST" action="{% url 'admin_user_delete' user.id %}" style="display:inline;">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-sm btn-outline-danger"
+        onclick="return confirm('Are you sure you want to delete {{ user.username }}?');">
+        Delete
+      </button>
+    </form>
+  </div>
+</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="alert alert-info text-center shadow-sm rounded">
+    No registered users found.
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

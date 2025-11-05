@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+{% block title %}Supporter Dashboard{% endblock %}
+{% block content %}
+
+<style>
+  body {
+    background: linear-gradient(135deg, #f9f9f9, #eef9f2);
+    font-family: "Poppins", sans-serif;
+  }
+
+  .dashboard-container {
+    background: white;
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    animation: fadeIn 0.8s ease;
+  }
+
+  h2 {
+    color: #d9534f;
+    font-weight: 700;
+    text-shadow: 1px 1px 0 #f8d7da;
+  }
+
+  h4 {
+    color: #b52b2b;
+    font-weight: 600;
+  }
+
+  .list-group-item {
+    border-radius: 10px !important;
+    margin-bottom: 0.5rem;
+    transition: all 0.3s ease;
+  }
+
+  .list-group-item:hover {
+    transform: translateY(-2px);
+    background-color: #f8f9fa;
+  }
+
+  .btn-outline-success, .btn-outline-danger {
+    border-radius: 10px;
+    transition: all 0.3s ease;
+  }
+
+  .btn-outline-success:hover {
+    background-color: #28a745;
+    color: white;
+  }
+
+  .btn-outline-danger:hover {
+    background-color: #dc3545;
+    color: white;
+  }
+
+  .section-divider {
+    border-top: 2px dashed #ddd;
+    margin: 2rem 0;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+<div class="container mt-5 dashboard-container">
+  <h2 class="text-center mb-4">🌼 Supporter Dashboard</h2>
+
+  <!-- 🌸 Pending Campaigns -->
+  <h4 class="mb-3">🕒 Pending Campaigns</h4>
+  {% if pending_campaigns %}
+  <ul class="list-group mb-4">
+    {% for campaign in pending_campaigns %}
+    <li class="list-group-item d-flex justify-content-between align-items-center shadow-sm">
+      <div>
+        <strong>{{ campaign.title }}</strong><br>
+        <small class="text-muted">{{ campaign.description|truncatechars:80 }}</small>
+      </div>
+      <a href="{% url 'approve_campaign' campaign.id %}" class="btn btn-sm btn-outline-success">Review</a>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="text-muted">No pending campaigns right now.</p>
+  {% endif %}
+
+  <div class="section-divider"></div>
+
+  <!-- 🌸 Approved Campaigns -->
+<h4 class="mb-3">✅ Approved Campaigns</h4>
+{% if approved_campaigns %}
+<ul class="list-group mb-4">
+  {% for campaign in approved_campaigns %}
+  <li class="list-group-item shadow-sm">
+    <h5 class="text-danger fw-bold mb-1">{{ campaign.title }}</h5>
+    <p class="text-muted mb-1"><strong>Status:</strong> Approved</p>
+    {% if campaign.description %}
+      <p class="mb-1"><strong>Description:</strong> {{ campaign.description }}</p>
+    {% endif %}
+    {% if campaign.location %}
+      <p class="mb-1"><strong>Location:</strong> {{ campaign.location }}</p>
+    {% endif %}
+    {% if campaign.date %}
+      <p class="mb-1"><strong>Date:</strong> {{ campaign.date }}</p>
+    {% endif %}
+    <p class="small text-secondary mb-2">
+    </p>
+    <a href="{% url 'view_campaign' campaign.id %}" class="btn btn-sm btn-outline-primary">View More</a>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p class="text-muted">No approved campaigns yet.</p>
+{% endif %}
+
+
+  <!-- 🌸 Rejected Campaigns -->
+  <h4 class="mb-3">❌ Rejected Campaigns</h4>
+  {% if rejected_campaigns %}
+  <ul class="list-group mb-4">
+    {% for campaign in rejected_campaigns %}
+    <li class="list-group-item shadow-sm">
+      <strong>{{ campaign.title }}</strong> — Rejected by <em>{{ campaign.supporter.username }}</em>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="text-muted">No rejected campaigns.</p>
+  {% endif %}
+
+  <div class="section-divider"></div>
+
+  
+
+  <div class="section-divider"></div>
+
+  <!-- 🌸 Articles Section -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <a href="{% url 'create_article' %}" class="btn btn-outline-danger btn-sm">📝 Add New Article</a>
+    <a href="{% url 'women_support_articles' %}" class="btn btn-outline-success btn-sm">📖 View All Articles</a>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- 🌸 Q&A Section -->
+  <h4 class="mb-3">💬 Questions Needing Answers</h4>
+  {% if questions %}
+  <ul class="list-group">
+    {% for q in questions %}
+    <li class="list-group-item shadow-sm">
+      <strong>Q:</strong> {{ q.question }}
+      <div class="mt-2">
+        {% if q.answer %}
+        <p><strong>Answer:</strong> {{ q.answer }}</p>
+        {% else %}
+        <a href="{% url 'reply_question' q.id %}" class="btn btn-sm btn-outline-success">Reply</a>
+        {% endif %}
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="text-muted">No questions yet.</p>
+  {% endif %}
+</div>
+
+<script>
+  // Smooth fade-in for each list item
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".list-group-item").forEach((item, i) => {
+      item.style.opacity = 0;
+      setTimeout(() => {
+        item.style.transition = "opacity 0.5s ease";
+        item.style.opacity = 1;
+      }, i * 100);
+    });
+  });
+</script>
+
+{% endblock %}

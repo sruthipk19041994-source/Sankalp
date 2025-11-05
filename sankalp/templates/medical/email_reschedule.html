@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <body style="font-family: Arial, sans-serif; background-color: #f9f9f9; padding: 20px;">
+    <div style="max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 10px;">
+      <h2 style="color: #198754;">📢 Medical Camp Scheduled</h2>
+
+      <p>Dear {{ camp.hospital.name }} & {{ camp.volunteer.username }},</p>
+      <p>
+        We are pleased to inform you that the medical camp request has been
+        <b style="color:#198754;">successfully scheduled</b>.
+      </p>
+
+      <div style="background-color: #f1f1f1; padding: 12px; border-radius: 8px; margin: 15px 0;">
+        <p><strong>🏥 Hospital:</strong> {{ camp.hospital.name }}</p>
+        <p><strong>📍 Location:</strong> {{ camp.location }}</p>
+        <p><strong>🗓️ Scheduled Date:</strong> {{ camp.scheduled_date|date:"d M Y" }}</p>
+p><strong>🗓️ Scheduled Time:</strong> 
+    {% if camp.scheduled_time %}
+        {{ camp.scheduled_time|time:"h:i A" }}
+    {% else %}
+        Not specified
+    {% endif %}
+</p>        <p><strong>📞 Contact Person:</strong> {{ camp.contact_person }} ({{ camp.phone }})</p>
+      </div>
+
+      <p>
+        Please ensure all necessary arrangements are made for a smooth and impactful camp.  
+        Thank you for your collaboration in serving the community 🌿
+      </p>
+
+      <p style="margin-top:20px;">Warm regards,<br><b>Team Sankalp</b></p>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}{{ form_title }}{% endblock %}
+{% block content %}
+<div class="container mt-5">
+  <h2 class="text-center text-danger fw-bold mb-4">📝 {{ form_title }}</h2>
+  <form method="post" class="shadow p-4 rounded bg-light">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <div class="text-center mt-3">
+      <button type="submit" class="btn btn-danger">Save</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

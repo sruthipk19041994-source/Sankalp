@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% block title %}Legal Awareness Information{% endblock %}
+{% block content %}
+<div class="container mt-5">
+  <h2 class="text-center text-danger fw-bold mb-4">{{ title }}</h2>
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} text-center">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
+  {% if role == 'Volunteer' %}
+  <div class="text-center mb-4">
+    <a href="{% url 'request_legal_camp' %}" class="btn btn-danger px-4 py-2 fw-semibold">
+      📢 Request New Legal Awareness Camp
+    </a>
+  </div>
+  {% endif %}
+
+  <div class="table-responsive card shadow-lg p-3 border-0 mb-5">
+    <table class="table table-bordered align-middle">
+      <thead class="table-danger text-center">
+        <tr>
+          <th>Title</th>
+          <th>Location</th>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Status</th>
+          <th>Requested By</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for camp in camps %}
+        <tr class="text-center">
+          <td>{{ camp.title }}</td>
+          <td>{{ camp.location }}</td>
+          <td>{{ camp.proposed_date|date:"d M Y" }}</td>
+          <td>{{ camp.proposed_time|time:"H:i" }}</td>
+          <td>
+            <span class="badge 
+              {% if camp.status == 'Approved' %}bg-success
+              {% elif camp.status == 'Rejected' %}bg-danger
+              {% else %}bg-secondary
+              {% endif %}">
+              {{ camp.status }}
+            </span>
+          </td>
+          <td>{{ camp.requested_by.username }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="6" class="text-center text-muted">No camps found.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% if role == 'Beneficiary' %}
+  <div class="row">
+    <!-- Left: Articles -->
+    <div class="col-lg-6 mb-4">
+      <div class="card shadow-sm">
+        <div class="card-header bg-danger text-white fw-bold text-center">📰 Legal Articles</div>
+        <div class="card-body" style="max-height:400px; overflow-y:auto;">
+          {% if articles %}
+            {% for article in articles %}
+              <div class="mb-3 border-bottom pb-2">
+                <h6 class="fw-bold">{{ article.title }}</h6>
+                <p class="small text-muted">By {{ article.author.get_full_name|default:article.author.username }} on {{ article.created_at|date:"M d, Y" }}</p>
+                <p>{{ article.content|truncatewords:30 }}</p>
+                <a href="{% url 'legal_article_detail' article.id %}" class="btn btn-outline-danger btn-sm">View More</a>
+              </div>
+            {% endfor %}
+          {% else %}
+            <p class="text-center text-muted">No articles available yet.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Questions -->
+    <div class="col-lg-6 mb-4">
+      <div class="card shadow-sm">
+        <div class="card-header bg-danger text-white fw-bold text-center">💬 Ask a Legal Question</div>
+        <div class="card-body">
+          <form method="post" action="{% url 'legal_questions' %}">
+            {% csrf_token %}
+            <textarea name="question" rows="2" class="form-control mb-2" placeholder="Type your legal question here..." required></textarea>
+            <button type="submit" class="btn btn-danger btn-sm w-100">Submit Question</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="card shadow-sm mt-4">
+        <div class="card-header bg-light fw-bold">🧾 My Questions & Answers</div>
+        <div class="card-body" style="max-height:350px; overflow-y:auto;">
+          {% if questions %}
+            {% for q in questions %}
+              <div class="mb-3 pb-2 border-bottom">
+                <p class="fw-semibold mb-1">Q: {{ q.question }}</p>
+                {% if q.answer %}
+                  <p class="text-success mb-0"><strong>A:</strong> {{ q.answer }}</p>
+                  <small class="text-muted">— Answered by {{ q.answered_by.get_full_name|default:q.answered_by.username }} on {{ q.answered_at|date:"M d, Y" }}</small>
+                {% else %}
+                  <p class="text-muted">⏳ Awaiting advocate’s response.</p>
+                {% endif %}
+              </div>
+            {% endfor %}
+          {% else %}
+            <p class="text-center text-muted">You haven’t asked any questions yet.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- 🔹 Advocate List -->
+  <!-- 🔹 Advocate List -->
+<div class="mt-5">
+  <h4 class="text-danger fw-bold mb-3">👩‍⚖️ Registered Advocates</h4>
+  <div class="row">
+    {% for advocate in advocates %}
+    <div class="col-md-4 mb-3">
+      <div class="card shadow border-0 p-3">
+        <h5 class="fw-semibold">{{ advocate.get_full_name|default:advocate.username }}</h5>
+        <p class="mb-1 text-muted"><strong>Email:</strong> {{ advocate.email }}</p>
+        <p class="mb-1 text-muted"><strong>Registered On:</strong> {{ advocate.date_joined|date:"d M Y" }}</p>
+      </div>
+    </div>
+    {% empty %}
+    <p class="text-muted text-center">No advocates registered yet.</p>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}

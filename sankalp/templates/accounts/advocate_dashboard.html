@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+{% block title %}Advocate Dashboard{% endblock %}
+{% block content %}
+
+<style>
+/* 🌸 Dashboard Styling */
+body {
+  background: #f8f9fa;
+}
+.dashboard-container {
+  max-width: 900px;
+  margin: 40px auto;
+}
+.section-card {
+  border: none;
+  border-radius: 15px;
+  background: #fff;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+  margin-bottom: 30px;
+  transition: all 0.3s ease;
+}
+.section-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+.section-card .card-header {
+  border-radius: 15px 15px 0 0 !important;
+  font-weight: 600;
+}
+.scroll-area {
+  max-height: 350px;
+  overflow-y: auto;
+}
+.scroll-area::-webkit-scrollbar {
+  width: 6px;
+}
+.scroll-area::-webkit-scrollbar-thumb {
+  background-color: #dc3545;
+  border-radius: 10px;
+}
+textarea.form-control {
+  resize: none;
+}
+.btn {
+  border-radius: 10px;
+  transition: 0.3s;
+}
+.btn:hover {
+  opacity: 0.9;
+  transform: scale(1.03);
+}
+.badge-status {
+  padding: 5px 8px;
+  border-radius: 8px;
+  font-size: 12px;
+}
+.bg-scheduled { background-color: #0d6efd; color: white; }
+.bg-approved { background-color: #198754; color: white; }
+.bg-pending { background-color: #ffc107; color: black; }
+.bg-rejected { background-color: #dc3545; color: white; }
+</style>
+
+<div class="dashboard-container">
+  <h2 class="text-center text-danger fw-bold mb-4">⚖️ Advocate Dashboard</h2>
+
+  <!-- 🔗 Quick Links -->
+  <div class="section-card p-4 text-center">
+    <a href="{% url 'legal_articles' %}" class="btn btn-outline-danger w-100 py-2 fw-bold shadow-sm">
+      📚 Manage Legal Articles
+    </a>
+  </div>
+
+  <!-- 🏕️ Camps by Status -->
+  {% for label, camp_list in camps_by_status.items %}
+  <div class="section-card">
+    <div class="card-header bg-danger text-white text-center">
+      {{ label }} Camps
+    </div>
+    <div class="card-body scroll-area">
+      {% if camp_list %}
+        {% for camp in camp_list %}
+        <div class="border-bottom pb-2 mb-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <h6 class="fw-bold mb-1">{{ camp.title }}</h6>
+            <span class="badge-status 
+              {% if label == 'Approved' %}bg-approved{% elif label == 'Scheduled' %}bg-scheduled
+              {% elif label == 'Pending' %}bg-pending{% elif label == 'Rejected' %}bg-rejected{% endif %}">
+              {{ label }}
+            </span>
+          </div>
+          <p class="small text-muted mb-1">
+            Requested by: {{ camp.requested_by.get_full_name|default:camp.requested_by.username }}
+          </p>
+
+          {% if label == 'Approved' or label == 'Scheduled' %}
+         <ul class="small mb-2">
+  <li><strong>Date:</strong> {{ camp.proposed_date|date:"M d, Y" }}</li>
+  <li><strong>Time:</strong> {{ camp.proposed_time|time:"H:i" }}</li>
+  <li><strong>Location:</strong> {{ camp.location|default:"Not provided" }}</li>
+  <li><strong>Description:</strong> {{ camp.description|default:"No description available" }}</li>
+</ul>
+
+          {% endif %}
+
+          {% if label == 'Pending' %}
+          <form method="post" action="{% url 'update_camp_status' camp.id %}">
+            {% csrf_token %}
+            <div class="d-flex gap-2">
+              <button name="status" value="Scheduled" class="btn btn-success btn-sm w-50">Approve</button>
+              <button name="status" value="Rejected" class="btn btn-danger btn-sm w-50">Reject</button>
+            </div>
+          </form>
+          {% endif %}
+        </div>
+        {% endfor %}
+      {% else %}
+        <p class="text-center text-muted mb-0">No {{ label|lower }} camps.</p>
+      {% endif %}
+    </div>
+  </div>
+  {% endfor %}
+
+  <!-- ✍️ Add New Article -->
+  <div class="section-card">
+    <div class="card-header bg-light fw-bold">✍️ Add New Article</div>
+    <div class="card-body">
+      <form method="post" action="{% url 'advocate_dashboard' %}">
+        {% csrf_token %}
+        {{ article_form.as_p }}
+        <button type="submit" class="btn btn-danger w-100 py-2">Publish Article</button>
+      </form>
+      <small class="text-muted d-block mt-2">Articles you publish appear in the public Articles page.</small>
+    </div>
+  </div>
+
+  <!-- 💬 Beneficiary Questions -->
+  <div class="section-card">
+    <div class="card-header bg-light fw-bold">💬 Questions from Beneficiaries</div>
+    <div class="card-body scroll-area">
+      {% if questions %}
+        {% for q in questions %}
+        <div class="mb-3 pb-2 border-bottom">
+          <p class="mb-1"><strong>Q:</strong> {{ q.question }}</p>
+          <small class="text-muted">
+            Asked by: {{ q.asked_by.get_full_name|default:q.asked_by.username }} 
+            on {{ q.created_at|date:"M d, Y" }}
+          </small>
+
+          {% if q.is_answered %}
+          <div class="mt-2 bg-light p-2 rounded">
+            <p class="mb-1"><strong>✅ Answer:</strong> {{ q.answer }}</p>
+            <small class="text-success">Answered on {{ q.answered_at|date:"M d, Y" }}</small>
+          </div>
+          {% else %}
+          <form method="post" action="{% url 'answer_legal_question' q.id %}" class="mt-2 answer-form">
+            {% csrf_token %}
+            <textarea name="answer" rows="2" class="form-control mb-2" placeholder="Write your answer..." required></textarea>
+            <button type="submit" class="btn btn-success btn-sm">Send Answer</button>
+          </form>
+          {% endif %}
+        </div>
+        {% endfor %}
+      {% else %}
+        <p class="text-center text-muted mb-0">No questions yet.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<!-- 🌟 Smooth Fade-In -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".section-card").forEach((card, i) => {
+    card.style.opacity = 0;
+    setTimeout(() => {
+      card.style.transition = "opacity 0.6s ease";
+      card.style.opacity = 1;
+    }, 150 * i);
+  });
+});
+</script>
+
+{% endblock %}

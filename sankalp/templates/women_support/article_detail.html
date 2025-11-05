@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}{{ article.title }}{% endblock %}
+{% block content %}
+<div class="container mt-5">
+  <h2 class="text-danger fw-bold mb-3">{{ article.title }}</h2>
+  <p class="text-muted">By <strong>{{ article.author.username }}</strong></p>
+  <hr>
+  <p>{{ article.content }}</p>
+  <hr>
+
+  <div class="d-flex justify-content-between align-items-center">
+<a href="{% url 'women_support_articles' %}" class="btn btn-outline-secondary">⬅ Back to All Articles</a>
+
+    {% if request.user == article.author %}
+    <div>
+      <a href="{% url 'edit_article' article.id %}" class="btn btn-outline-warning btn-sm">✏️ Edit</a>
+      <form action="{% url 'delete_article' article.id %}" method="post" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-outline-danger btn-sm"
+                onclick="return confirm('Are you sure you want to delete this article?');">
+          🗑️ Delete
+        </button>
+      </form>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

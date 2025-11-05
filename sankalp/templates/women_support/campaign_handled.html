@@ -1,0 +1,31 @@
+<!-- campaign_handled.html -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Campaign Status</title>
+    <style>
+      body { font-family: Arial, sans-serif; text-align: center; padding: 40px; }
+      .approved { color: green; }
+      .rejected { color: red; }
+      .pending { color: orange; }
+    </style>
+  </head>
+  <body>
+    {% if camp.status == "Approved" %}
+      <h2 class="approved">✅ This campaign has been approved!</h2>
+      {% if camp.supporter %}
+        <p>Handled by: {{ camp.supporter.username }}</p>
+      {% endif %}
+    {% elif camp.status == "Rejected" %}
+      <h2 class="rejected">❌ This campaign was rejected.</h2>
+      {% if camp.supporter %}
+        <p>Handled by: {{ camp.supporter.username }}</p>
+      {% endif %}
+    {% else %}
+      <h2 class="pending">🌼 This campaign is pending supporter review.</h2>
+    {% endif %}
+
+    <a href="{% url 'women_support_info' %}" style="display:inline-block; margin-top:20px; text-decoration:none; background:#4CAF50; color:white; padding:10px 20px; border-radius:5px;">Back to Campaigns</a>
+  </body>
+</html>

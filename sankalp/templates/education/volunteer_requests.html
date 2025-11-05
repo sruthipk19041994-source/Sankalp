@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% block title %}Volunteer - Education Requests{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="text-center fw-bold text-primary mb-4">📚 Education Support Requests</h2>
+  <hr class="w-25 mx-auto mb-4">
+
+  {% if requests %}
+  <div class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>#</th>
+          <th>Beneficiary</th>
+          <th>Education Level</th>
+          <th>Reason</th>
+          <th>Document</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for req in requests %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          <td>{{ req.full_name }}</td>
+          <td>{{ req.education_level }}</td>
+          <td>{{ req.reason|truncatechars:40 }}</td>
+          <td>
+            {% if req.document %}
+              <a href="{{ req.document.url }}" target="_blank" class="btn btn-sm btn-outline-secondary">📄 View</a>
+            {% else %}
+              <span class="text-muted">—</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if req.status == 'Pending' %}
+              <span class="badge bg-warning text-dark">Pending</span>
+            {% elif req.status == 'Forwarded' %}
+              <span class="badge bg-info text-dark">Forwarded</span>
+            {% elif req.status == 'Approved' %}
+              <span class="badge bg-success">Approved</span>
+            {% elif req.status == 'Rejected' %}
+              <span class="badge bg-danger">Rejected</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if req.status == 'Pending' %}
+              <!-- ✅ Volunteer can forward to donor -->
+              <form method="post" action="{% url 'volunteer_forward_request' req.id %}" class="d-flex align-items-center">
+                {% csrf_token %}
+                <select name="donor_id" class="form-select form-select-sm me-2" required>
+                  <option value="" disabled selected>Select Donor</option>
+                  {% for donor in donors %}
+                    <option value="{{ donor.id }}">{{ donor.username }}</option>
+                  {% endfor %}
+                </select>
+                <button type="submit" class="btn btn-sm btn-outline-primary">
+                  ✉️ Forward
+                </button>
+              </form>
+
+            {% elif req.status == 'Forwarded' %}
+              <!-- ✅ Show forwarded details -->
+              <span class="text-info small">
+                <i class="bi bi-arrow-right-circle"></i>
+                Forwarded to {{ req.forwarded_to.username }}
+              </span>
+            {% else %}
+              <span class="text-muted">—</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+    <p class="text-center text-muted mt-4">No education requests available.</p>
+  {% endif %}
+
+  <!-- 🌟 Forwarded Requests Summary -->
+  <div class="mt-5">
+    <h4 class="fw-bold text-success mb-3">📨 Forwarded Requests Summary</h4>
+    <hr class="w-25 mx-0">
+
+    {% if forwarded_requests %}
+      <ul class="list-group">
+        {% for req in forwarded_requests %}
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+              <strong>{{ req.full_name }}</strong> — {{ req.education_level }}
+              <br>
+              <small class="text-muted">
+                Forwarded on {{ req.forwarded_at|date:"M d, Y - H:i" }}
+              </small>
+            </div>
+
+            {% if req.forwarded_to %}
+              <span class="badge bg-info text-dark">
+                To {{ req.forwarded_to.username }}
+              </span>
+            {% else %}
+              <span class="badge bg-secondary">Donor not set</span>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="text-muted">No requests have been forwarded yet.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}Request Campaign{% endblock %}
+{% block content %}
+<div class="container" style="margin-top: 50px; max-width: 700px;">
+  <h2 style="text-align: center; color: #dc3545; font-weight: 700; margin-bottom: 30px;">
+    🌸 Request a Women Support Campaign
+  </h2>
+  <form method="post" style="padding: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border-radius: 10px; background-color: #f8f9fa;">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <div style="text-align: center; margin-top: 20px;">
+      <button type="submit" style="
+        background-color: #dc3545;
+        color: #fff;
+        padding: 10px 25px;
+        border: none;
+        border-radius: 5px;
+        font-weight: 600;
+        cursor: pointer;
+      ">
+        Submit Request
+      </button>
+    </div>
+  </form>
+</div>
+{% endblock %}

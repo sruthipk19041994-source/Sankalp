@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Approve Campaign{% endblock %}
+{% block content %}
+<div class="container mt-5 col-md-6">
+  <h2 class="text-center text-danger mb-4">💮 Approve / Update Campaign</h2>
+  <h5 class="text-center text-muted mb-3">{{ campaign.title }}</h5>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <div class="text-center">
+      <button type="submit" class="btn btn-success px-4">Save</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

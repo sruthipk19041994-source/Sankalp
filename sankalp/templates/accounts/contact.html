@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% block title %}Contact - Sankalp{% endblock %}
+{% block content %}
+
+<style>
+  body {
+    background: linear-gradient(135deg, #e8f9e9, #f9f9e8, #eaf7fd);
+    min-height: 100vh;
+    font-family: "Poppins", sans-serif;
+  }
+
+  h1, h4 {
+    font-weight: 700;
+  }
+
+  .contact-header {
+    color: #3a7c59;
+  }
+
+  .contact-card {
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 20px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 6px 25px rgba(180, 220, 180, 0.25);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .contact-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 35px rgba(150, 200, 150, 0.25);
+  }
+
+  .table thead {
+    background: linear-gradient(135deg, #a5d6a7, #c8e6c9);
+  }
+
+  .table tbody tr:hover {
+    background-color: #f1f8e9;
+  }
+
+  a {
+    color: #388e3c;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  hr {
+    border: none;
+    height: 3px;
+    width: 80px;
+    background: linear-gradient(90deg, #81c784, #aed581);
+    margin: 10px auto;
+  }
+
+  @media (max-width: 576px) {
+    .contact-card {
+      padding: 1.5rem;
+    }
+  }
+</style>
+
+<div class="container my-5">
+  <div class="text-center mb-4">
+    <h1 class="contact-header">Contact Us 🌿</h1>
+    <p class="lead text-muted">Reach out to Sankalp or connect with our dedicated volunteers</p>
+    <hr>
+  </div>
+
+  <!-- Office Info -->
+  <div class="contact-card p-4 mb-5 text-center">
+    <h4 class="fw-bold mb-3 text-success">📍 Sankalp Headquarters</h4>
+    <p class="mb-1"><strong>Address:</strong> Kochi, Kerala – 682021</p>
+    <p class="mb-1">
+      <strong>Email:</strong>
+      <a href="mailto:contact@sankalp.org">contact@sankalp.org</a>
+    </p>
+    <p class="mb-0"><strong>Phone:</strong> +91 98765 43210</p>
+  </div>
+
+  <!-- Volunteer Info -->
+  <div class="contact-card p-4">
+    <h4 class="fw-bold text-success mb-3 text-center">🤝 Our Volunteers</h4>
+    {% if volunteers %}
+      <div class="table-responsive">
+        <table class="table table-striped align-middle text-center">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Contact</th>
+              <th>Address</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for v in volunteers %}
+            <tr>
+              <td>{{ v.get_full_name|default:v.username }}</td>
+              <td>{{ v.email }}</td>
+              <td>{{ v.contact }}</td>
+              <td>{{ v.address|default:"—" }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p class="text-muted text-center">No volunteers available right now.</p>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

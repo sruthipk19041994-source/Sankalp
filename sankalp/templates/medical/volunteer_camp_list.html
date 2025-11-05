@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block title %}Medical Camp Requests{% endblock %}
+{% block content %}
+<div class="container mt-5">
+  <h2 class="text-center text-primary fw-bold mb-4">
+    {% if user.role == 'Admin' %}All Medical Camp Requests
+    {% else %}My Medical Camp Requests{% endif %}
+  </h2>
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-info alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  {% if camps %}
+    <div class="table-responsive shadow-sm rounded">
+      <table class="table table-hover table-bordered align-middle mb-0">
+        <thead class="table-dark text-center">
+          <tr>
+            <th>Hospital</th>
+            <th>Location</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for camp in camps %}
+          <tr class="text-center align-middle">
+            <td>{{ camp.hospital.name }}</td>
+            <td>{{ camp.location }}</td>
+            <td>{{ camp.date|date:"d M Y" }}</td>
+            <td>{{ camp.time|time:"H:i" }}</td>
+            <td>
+             <span class="badge px-3 py-2 fs-6"style="
+    {% if camp.approval_status == 'Pending' %}background-color: #ffc107; color: #212529;
+    {% elif camp.approval_status == 'Rejected' %}background-color: #dc3545; color: #fff;
+    {% elif camp.approval_status == 'Approved' %}background-color: #28a745; color: #fff;
+    {% elif camp.approval_status == 'Scheduled' %}background-color: #28a745; color: #fff;
+    {% endif %}
+  ">
+  {{ camp.approval_status }}
+</span>
+
+
+              </span>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="text-center text-muted fs-5 mt-4">No medical camp requests yet.</p>
+  {% endif %}
+</div>
+{% endblock %}

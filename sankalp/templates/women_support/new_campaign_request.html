@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <body style="font-family: Arial, sans-serif;">
+    <h2>🌸 New Women Support Campaign Request</h2>
+
+    <p><strong>Title:</strong> {{ title }}</p>
+    <p><strong>Description:</strong> {{ description }}</p>
+    <p><strong>Location:</strong> {{ location }}</p>
+    <p><strong>Proposed Date:</strong> {{ proposed_date }}</p>
+
+    <p><strong>🗓️ Scheduled Time:</strong> 
+    {% if camp.scheduled_time %}
+        {{ camp.scheduled_time|time:"h:i A" }}
+    {% else %}
+        Not specified
+    {% endif %}
+    </p>
+
+    <p><strong>Requested By:</strong> {{ volunteer_name }}</p>
+    <hr>
+
+    {% if status == "Pending" %}
+      <p>🌼 Please review this campaign:</p>
+      <a href="{{ domain }}{% url 'approve_women_campaign' camp_id %}"
+         style="background-color:#28a745;color:white;padding:10px 15px;text-decoration:none;border-radius:6px;">
+         ✅ Approve
+      </a>
+      <a href="{{ domain }}{% url 'reject_women_campaign' camp_id %}"
+         style="background-color:#dc3545;color:white;padding:10px 15px;text-decoration:none;border-radius:6px;margin-left:10px;">
+         ❌ Reject
+      </a>
+    {% elif status == "Approved" %}
+      <p style="color:green;font-weight:bold;">🎉 Request accepted successfully!</p>
+    {% elif status == "Rejected" %}
+      <p style="color:red;font-weight:bold;">❌ This campaign has been rejected.</p>
+    {% endif %}
+  </body>
+</html>

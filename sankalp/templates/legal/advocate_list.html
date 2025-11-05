@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}Registered Advocates{% endblock %}
+{% block content %}
+<div class="container mt-5">
+  <h2 class="text-center text-danger fw-bold mb-4">👩‍⚖️ Registered Advocates</h2>
+
+  <div class="row">
+    {% for advocate in advocates %}
+    <div class="col-md-4 mb-4">
+      <div class="card shadow border-0 p-4 text-center">
+        <h5 class="fw-semibold">{{ advocate.username }}</h5>
+        <p class="mb-1 text-muted">{{ advocate.email }}</p>
+      </div>
+    </div>
+    {% empty %}
+    <p class="text-center text-muted">No advocates found.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

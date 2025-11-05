@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Camp Details{% endblock %}
+{% block content %}
+<div class="container mt-5">
+  <div class="card shadow p-4">
+    <h3 class="text-center text-info fw-bold mb-4">🏥 Medical Camp Details</h3>
+    <p><strong>Hospital:</strong> {{ camp.hospital.name }}</p>
+    <p><strong>Location:</strong> {{ camp.location }}</p>
+    <p><strong>Date:</strong> {{ camp.date }}</p>
+    <p><strong>Scheduled Date:</strong> {{ camp.scheduled_date|default:"Not Scheduled" }}</p>
+    <p><strong>Scheduled Time:</strong> {{ camp.time|default:"Not Scheduled" }}</p>
+    <p><strong>Status:</strong> {{ camp.approval_status }}</p>
+    <p><strong>Description:</strong> {{ camp.description }}</p>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Medical Camp Info{% endblock %}
+{% block content %}
+<div class="container mt-5">
+  <h2 class="text-center text-success fw-bold mb-4">🌿 Upcoming Medical Camps</h2>
+
+  {% if camps %}
+    <div class="row">
+      {% for camp in camps %}
+        <div class="col-md-6 mb-4">
+          <div class="card shadow p-3">
+            <h5 class="fw-bold">{{ camp.hospital.name }}</h5>
+            <p><strong>📍 Location:</strong> {{ camp.location }}</p>
+            <p><strong>🗓 Date:</strong> {{ camp.date|date:"d M Y" }}</p>
+            <p><strong>⏰ Time:</strong> {{ camp.time|time:"H:i" }}</p>
+            <p><strong>Status:</strong> {{ camp.approval_status }}</p>
+            <a href="{% url 'medical_camp_detail' camp.id %}" class="btn btn-outline-primary btn-sm">
+              View Details
+            </a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="text-center text-muted">No approved or scheduled camps available right now.</p>
+  {% endif %}
+</div>
+{% endblock %}

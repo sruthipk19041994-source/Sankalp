@@ -1,0 +1,240 @@
+{% extends 'base.html' %}
+{% block title %}Welcome to Sankalp{% endblock %}
+
+{% block content %}
+<style>
+  /* 🌿 Hero Section */
+  .hero {
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+                url('https://images.unsplash.com/photo-1509099836639-18ba1795216d?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+    color: #fff;
+    height: 85vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-radius: 20px;
+    margin-top: 20px;
+    animation: fadeIn 1.2s ease-in-out;
+  }
+
+  .hero h1 {
+    font-size: 3rem;
+    font-weight: 700;
+  }
+
+  .hero p {
+    font-size: 1.2rem;
+    color: #f2f2f2;
+  }
+
+  .btn-hero {
+    background: #28a745;
+    border: none;
+    color: white;
+    font-weight: 600;
+    border-radius: 30px;
+    padding: 12px 30px;
+    transition: all 0.3s ease;
+  }
+
+  .btn-hero:hover {
+    background: #1c7430;
+    transform: translateY(-3px);
+  }
+
+  /* 🌍 Section */
+  .section {
+    padding: 80px 0;
+  }
+
+  .icon-box {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    transition: transform 0.3s ease;
+  }
+
+  .feature-card:hover .icon-box {
+    transform: scale(1.3);
+  }
+
+  .section-title {
+    font-weight: 700;
+    color: #198754;
+    margin-bottom: 20px;
+  }
+
+  /* ✨ Color Pulse Cards */
+  .feature-card {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.4s ease;
+    padding: 30px 20px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .feature-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, #84fab0, #8fd3f4);
+    opacity: 0;
+    z-index: 0;
+    transition: opacity 0.5s ease;
+    border-radius: 20px;
+  }
+
+  .feature-card:hover::before {
+    opacity: 1;
+  }
+
+  .feature-card * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    color: white;
+  }
+
+  .feature-card:hover h5,
+  .feature-card:hover p {
+    color: white;
+  }
+
+  /* 🌟 Floating CTA */
+  .floating-btn {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    background: #198754;
+    color: #fff;
+    padding: 15px 25px;
+    border-radius: 50px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    text-decoration: none;
+    transition: 0.3s;
+    font-weight: 600;
+    z-index: 1000;
+  }
+
+  .floating-btn:hover {
+    background: #157347;
+    transform: translateY(-4px);
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 768px) {
+    .hero h1 {
+      font-size: 2.2rem;
+    }
+    .hero {
+      height: 70vh;
+    }
+  }
+</style>
+
+<!-- 🌿 Hero Section -->
+<section class="hero">
+  <div class="container">
+    <h1 class="mb-3">Together, We Rise 🌿</h1>
+    <p class="mb-4">Empowering lives through education, justice, compassion, and equality — this is our Sankalp.</p>
+    <a href="{% url 'register' %}" class="btn btn-hero me-2">Join Us</a>
+    <a href="{% url 'login' %}" class="btn btn-outline-light btn-hero">Login</a>
+  </div>
+</section>
+
+<!-- 🎯 Mission & Vision -->
+<section class="section bg-light text-center">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-md-6">
+        <div class="feature-card">
+          <div class="icon-box">🎯</div>
+          <h3 class="section-title">Our Mission</h3>
+          <p class="text-muted">
+            To bridge privilege and need by empowering communities through education, healthcare,
+            legal support, and women empowerment — ensuring dignity and hope for all.
+          </p>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="feature-card">
+          <div class="icon-box">🌈</div>
+          <h3 class="section-title">Our Vision</h3>
+          <p class="text-muted">
+            A compassionate world where no one is left behind — where justice, equality, and kindness
+            are not dreams, but realities shaped by collective action.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 💫 Key Initiatives -->
+<section class="section text-center">
+  <div class="container">
+    <h2 class="fw-bold text-success mb-5">Our Key Initiatives 💖</h2>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="feature-card">
+          <div class="icon-box">📘</div>
+          <h5 class="fw-semibold text-primary">Education for All</h5>
+          <p class="small text-muted">Supporting students from underserved communities to achieve their dreams.</p>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="feature-card">
+          <div class="icon-box">⚖️</div>
+          <h5 class="fw-semibold text-success">Legal Awareness</h5>
+          <p class="small text-muted">Providing access to justice and awareness to those without representation.</p>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="feature-card">
+          <div class="icon-box">🌸</div>
+          <h5 class="fw-semibold text-danger">Women Empowerment</h5>
+          <p class="small text-muted">Encouraging women to lead and thrive through skill, rights, and health programs.</p>
+        </div>
+      </div>
+
+
+      <div class="col-md-4">
+        <div class="feature-card">
+          <div class="icon-box">🏥</div>
+          <h5 class="fw-semibold text-info">Health & Healing</h5>
+          <p class="small text-muted">Organizing free medical camps and spreading preventive health awareness.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 🌟 Floating CTA -->
+<a href="{% url 'register' %}" class="floating-btn">✨ Join Sankalp</a>
+
+<script>
+  // Subtle fade animation on scroll
+  document.addEventListener("scroll", () => {
+    document.querySelectorAll(".feature-card").forEach((card) => {
+      const rect = card.getBoundingClientRect().top;
+      if (rect < window.innerHeight - 100) {
+        card.style.animation = "fadeIn 0.8s forwards";
+      }
+    });
+  });
+</script>
+{% endblock %}

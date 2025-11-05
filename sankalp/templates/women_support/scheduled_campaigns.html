@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}Scheduled Campaigns - Sankalp{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="text-center fw-bold text-primary mb-4">Approved & Scheduled Campaigns</h2>
+  <hr>
+
+  {% if campaigns %}
+  <div class="table-responsive">
+    <table class="table table-striped align-middle">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Location</th>
+          <th>Scheduled Date</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for campaign in campaigns %}
+        <tr>
+          <td>{{ campaign.title }}</td>
+          <td>{{ campaign.location }}</td>
+          <td>{{ campaign.scheduled_date|date:"M d, Y" }}</td>
+          <td><span class="badge bg-success">Approved</span></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p class="text-center text-muted">No approved or scheduled campaigns yet.</p>
+  {% endif %}
+</div>
+{% endblock %}

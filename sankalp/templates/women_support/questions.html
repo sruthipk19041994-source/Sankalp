@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}Women Support Q&A{% endblock %}
+{% block content %}
+<div class="container mt-5">
+  <h2 class="text-center text-danger mb-4">💬 Questions & Answers</h2>
+  {% if user.role == 'Beneficiary' %}
+  <div class="text-end mb-3">
+<a href="{% url 'women_ask_question' %}" class="btn btn-sm btn-danger">+ Ask a Question</a>
+  </div>
+  {% endif %}
+  {% if questions %}
+  <div class="list-group">
+    {% for q in questions %}
+    <div class="list-group-item mb-3">
+      <h5>{{ q.question }}</h5>
+      <p class="small text-muted">Asked by: {{ q.asked_by.username }}</p>
+      {% if q.answer %}
+      <div class="alert alert-light border mt-2">
+        <strong>Answer:</strong> {{ q.answer }}
+        <p class="small text-muted mb-0">— {{ q.answered_by.username }}</p>
+      </div>
+        {% csrf_token %}
+        <textarea name="answer" class="form-control mb-2" placeholder="Type your answer..." required></textarea>
+        <button type="submit" class="btn btn-sm btn-success">Submit Answer</button>
+      </form>
+      {% else %}
+      <p class="text-muted">Awaiting answer...</p>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="text-center text-muted">No questions yet.</p>
+  {% endif %}
+</div>
+{% endblock %}

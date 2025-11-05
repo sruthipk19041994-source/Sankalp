@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}Legal Articles{% endblock %}
+{% block content %}
+<div class="container mt-5">
+  <h2 class="text-center text-danger mb-4">📚 Legal Awareness Articles</h2>
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} text-center">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
+  {% for article in articles %}
+  <div class="card mb-3 shadow-sm">
+    <div class="card-body">
+      <h5 class="card-title fw-bold">{{ article.title }}</h5>
+      <p class="card-text">{{ article.content|linebreaks }}</p>
+      <small class="text-muted d-block mb-2">
+        By {{ article.author.username }} on {{ article.created_at|date:"M d, Y" }}
+      </small>
+
+      {% if user == article.author %}
+      <!-- Buttons -->
+      <div class="d-flex gap-2">
+        <!-- ✏️ Edit -->
+        <button class="btn btn-sm btn-warning" type="button"
+                data-bs-toggle="collapse" data-bs-target="#editForm{{ article.id }}">
+          ✏️ Edit
+        </button>
+
+        <!-- 🗑️ Delete -->
+        <form method="post" action="{% url 'delete_legal_article' article.id %}" onsubmit="return confirm('Are you sure you want to delete this article?');">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-sm btn-danger">🗑️ Delete</button>
+        </form>
+      </div>
+
+      <!-- Collapsible Edit Form -->
+      <div class="collapse mt-3" id="editForm{{ article.id }}">
+        <form method="post" action="{% url 'edit_legal_article' article.id %}">
+          {% csrf_token %}
+          <input type="text" name="title" value="{{ article.title }}" class="form-control mb-2" required>
+          <textarea name="content" class="form-control mb-2" rows="4" required>{{ article.content }}</textarea>
+          <button type="submit" class="btn btn-success btn-sm">Save Changes</button>
+        </form>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+  {% empty %}
+  <p class="text-center">No articles available yet.</p>
+  {% endfor %}
+</div>
+{% endblock %}

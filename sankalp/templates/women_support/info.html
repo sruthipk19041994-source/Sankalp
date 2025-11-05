@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% block title %}Women Support Info{% endblock %}
+{% block content %}
+<div class="container mt-5">
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="text-danger fw-bold mb-0">🌸 Women Support Information</h2>
+    {% if user.role == 'Volunteer' %}
+      <a href="{% url 'request_campaign' %}" class="btn btn-outline-danger btn-sm">➕ Request New Campaign</a>
+    {% endif %}
+  </div>
+
+  {% if campaigns %}
+  <div class="table-responsive mb-5">
+    <table class="table table-bordered text-center align-middle shadow-sm">
+      <thead class="table-danger">
+        <tr>
+          <th>Title</th>
+          <th>Status</th>
+          <th>Requested By</th>
+          <th>Scheduled / Proposed Date & Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in campaigns %}
+        <tr>
+          <td>{{ c.title }}</td>
+          <td>
+            <span class="badge 
+              {% if c.status == 'Pending' %}bg-warning
+              {% elif c.status == 'Approved' %}bg-success
+              {% elif c.status == 'Rejected' %}bg-danger
+              {% elif c.status == 'Scheduled' %}bg-primary
+              {% else %}bg-secondary{% endif %}">
+              {{ c.status }}
+            </span>
+          </td>
+          <td>{{ c.volunteer.username }}</td>
+          <td>
+            {% if c.scheduled_date %}
+              {{ c.scheduled_date|date:"d M Y" }}{% if c.scheduled_time %} at {{ c.scheduled_time|time:"h:i A" }}{% endif %}
+            {% else %}
+              {{ c.proposed_date|default:"Not scheduled" }}{% if c.proposed_time %} at {{ c.proposed_time|time:"h:i A" }}{% endif %}
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p class="text-center text-muted mt-4">No campaigns found yet.</p>
+  {% endif %}
+
+  {% if user.role == 'Beneficiary' %}
+  <hr class="my-5">
+
+  <!-- 📰 Articles -->
+  <h4 class="text-danger fw-bold mb-3">📚 Awareness Articles</h4>
+  {% if articles %}
+  <ul class="list-group mb-5">
+    {% for article in articles %}
+    <li class="list-group-item">
+      <h6 class="fw-bold">{{ article.title }}</h6>
+      <p class="small text-muted mb-1">{{ article.content|truncatechars:120 }}</p>
+      <span class="text-muted small">By {{ article.author.username }}</span>
+      <div class="text-end mt-2">
+        <a href="{% url 'view_article' article.id %}" class="btn btn-outline-danger btn-sm">📖 View Article</a>
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="text-muted">No articles available yet.</p>
+  {% endif %}
+
+  <!-- 💬 Q&A -->
+  <h4 class="text-danger fw-bold mb-3">💬 Common Questions</h4>
+  {% if questions %}
+  <div class="accordion" id="qaAccordion">
+    {% for q in questions %}
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading{{ q.id }}">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ q.id }}">
+          {{ q.question }}
+        </button>
+      </h2>
+      <div id="collapse{{ q.id }}" class="accordion-collapse collapse" data-bs-parent="#qaAccordion">
+        <div class="accordion-body">
+          <strong>Answer:</strong> {{ q.answer|default:"No answer yet." }}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="text-muted">No answered questions available.</p>
+  {% endif %}
+
+  <div class="text-center mt-4">
+    <a href="{% url 'women_ask_question' %}" class="btn btn-outline-danger btn-sm">💬 Ask a Question</a>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}

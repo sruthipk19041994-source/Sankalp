@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Medical Camp Request</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f7f7f7; padding: 20px;">
+  <div style="max-width: 600px; margin: auto; background: #fff; padding: 20px; border-radius: 8px;">
+    <h2 style="color: #007bff;">Medical Camp Request from {{ camp.volunteer.username }}</h2>
+    <p><strong>Hospital:</strong> {{ hospital.name }}</p>
+    <p><strong>Location:</strong> {{ camp.location }}</p>
+    <p><strong>Date:</strong> {{ camp.date }}</p>
+    <p><strong>Description:</strong> {{ camp.description }}</p>
+    <p><strong>🗓️ Scheduled Time:</strong> 
+    {% if camp.scheduled_time %}
+        {{ camp.scheduled_time|time:"h:i A" }}
+    {% else %}
+        Not specified
+    {% endif %}
+</p>
+
+    <p>Please review the request and respond below:</p>
+
+    <p>
+      <a href="{{ approve_url }}" style="background-color:#28a745;color:white;padding:10px 20px;text-decoration:none;border-radius:5px;">Approve</a>
+      <a href="{{ reject_url }}" style="background-color:#dc3545;color:white;padding:10px 20px;text-decoration:none;border-radius:5px;margin-left:10px;">Reject</a>
+    </p>
+  </div>
+</body>
+</html>

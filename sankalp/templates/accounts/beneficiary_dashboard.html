@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}Beneficiary Dashboard{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="text-center mb-4">
+    <h2 class="fw-bold text-primary">Welcome, {{ user.username }} 🌸</h2>
+    <p class="text-muted">Access and track your community support programs below.</p>
+    <hr class="w-25 mx-auto">
+  </div>
+
+  <div class="row justify-content-center mt-4">
+    <!-- 🎓 Education -->
+    <div class="col-md-6 col-lg-4 mb-4">
+      <div class="card shadow-sm border-0 text-center p-4 h-100">
+        <h5 class="fw-bold text-success">🎓 Education Support</h5>
+        <p class="small text-muted">Request help for school fees, books, or digital access through <strong>Udaan</strong>.</p>
+        <a href="{% url 'education_info' %}" class="btn btn-success btn-sm px-4">Explore</a>
+      </div>
+    </div>
+
+    <!-- 🩺 Medical -->
+    <div class="col-md-6 col-lg-4 mb-4">
+      <div class="card shadow-sm border-0 text-center p-4 h-100">
+        <h5 class="fw-bold text-danger">🏥 Medical Help</h5>
+        <p class="small text-muted">Find free medical camps, health checkups, and awareness drives under <strong>HealingMiles</strong>.</p>
+        <a href="{% url 'medical_info' %}" class="btn btn-danger btn-sm px-4">View Camps</a>
+      </div>
+    </div>
+
+
+    <!-- ⚖️ Legal -->
+    <div class="col-md-6 col-lg-4 mb-4">
+      <div class="card shadow-sm border-0 text-center p-4 h-100">
+        <h5 class="fw-bold text-secondary">⚖️ Legal Help</h5>
+        <p class="small text-muted">Get guidance, legal awareness sessions, and connect with advocates through <strong>NyayaSakhi</strong>.</p>
+        <a href="{% url 'legal_info' %}" class="btn btn-outline-secondary btn-sm px-4">View Legal Info</a>
+      </div>
+    </div>
+
+    <!-- 🌸 Women Support -->
+    <div class="col-md-6 col-lg-4 mb-4">
+      <div class="card shadow-sm border-0 text-center p-4 h-100">
+        <h5 class="fw-bold text-pink" style="color:#ff69b4;">🌸 Women Support</h5>
+        <p class="small text-muted">Join <strong>Rhythm28</strong> & <strong>Ray of Hope</strong> initiatives for menstrual care and reproductive wellness.</p>
+        <a href="{% url 'women_support_info' %}" class="btn btn-sm text-white px-4" style="background-color:#ff69b4;">Know More</a>
+      </div>
+    </div>
+    
+  </div>
+</div>
+{% endblock %}

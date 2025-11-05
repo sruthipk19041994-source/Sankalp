@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}Admin - Education Requests{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <h3 class="fw-bold text-primary text-center">📘 All Education Support Requests</h3>
+  <hr class="w-25 mx-auto mb-4">
+{% if requests %}
+<div class="table-responsive">
+  <table class="table table-bordered align-middle">
+    <thead class="table-light">
+      <tr>
+        <th>ID</th>
+        <th>Student Name</th>
+        <th>Education Level</th>
+        <th>Forwarded To</th>
+        <th>Status</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for req in requests %}
+      <tr>
+        <td>{{ req.id }}</td>
+        <td>{{ req.full_name }}</td>
+        <td>{{ req.education_level }}</td>
+        <td>
+          {% if req.forwarded_to %}
+            {{ req.forwarded_to.username }}
+          {% else %}
+            -
+          {% endif %}
+        </td>
+        <td>{{ req.status }}</td>
+        <td>{{ req.created_at|date:"M d, Y" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+  <p class="text-center text-muted mt-4">No requests available yet.</p>
+{% endif %}
+
+</div>
+{% endblock %}

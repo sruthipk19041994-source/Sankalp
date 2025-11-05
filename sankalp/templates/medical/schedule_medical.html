@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Schedule Medical Camp{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="card shadow p-4 mx-auto" style="max-width: 500px;">
+    <h3 class="text-center text-primary fw-bold mb-3">📅 Schedule Camp</h3>
+    <form method="post">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="date" class="form-label fw-semibold">Select New Date:</label>
+        <input type="date" id="date" name="scheduled_date" class="form-control" required>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-success px-4">Save Schedule</button>
+        <a href="{% url 'volunteer_medical_list' %}" class="btn btn-secondary ms-2">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

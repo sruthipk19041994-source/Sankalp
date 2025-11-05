@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% block title %}Volunteer Dashboard{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <h2 class="fw-bold text-center text-success">🌿 Welcome, {{ user.username }}!</h2>
+  <p class="text-center text-muted">
+    Manage and coordinate activities across education, food, legal aid, medical, and women support programs.
+  </p>
+  <hr class="w-50 mx-auto mb-4">
+  {% if upcoming_campaigns %}
+  <div class="alert alert-warning shadow-sm rounded-3 mb-4">
+    <h5 class="mb-3">🔔 You have {{ upcoming_campaigns.count }} campaign(s) scheduled for tomorrow!</h5>
+    {% for camp in upcoming_campaigns %}
+      <div class="mb-2">
+        <strong>{{ camp.title }}</strong> at {{ camp.location }} on {{ camp.scheduled_date }}<br>
+        <a href="{% url 'send_supporter_reminder' camp.id %}" class="btn btn-sm btn-warning mt-2">
+          📱 Send Reminder to Supporter
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+
+  <div class="row g-4">
+
+    <!-- 📘 Education -->
+    <div class="col-md-4 col-lg-3">
+      <div class="card shadow-sm border-0 rounded-3">
+        <div class="card-body text-center">
+          <h5 class="card-title text-primary fw-semibold">📘 Education</h5>
+          <p class="text-muted small">View beneficiary education support requests and connect donors.</p>
+          <a href="{% url 'volunteer_education_requests' %}" class="btn btn-outline-primary btn-sm px-3">
+            View Requests
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 🏥 Medical -->
+    <div class="col-md-4 col-lg-3">
+      <div class="card shadow-sm border-0 rounded-3">
+        <div class="card-body text-center">
+          <h5 class="card-title text-danger fw-semibold">🏥 Medical</h5>
+          <p class="text-muted small">Organize and record free medical camps for underprivileged areas.</p>
+          <a href="{% url 'medical_camp_request' %}" class="btn btn-outline-danger btn-sm px-3">
+            Manage Camps
+          </a>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ⚖️ Legal Help -->
+    <div class="col-md-4 col-lg-3">
+      <div class="card shadow-sm border-0 rounded-3">
+        <div class="card-body text-center">
+          <h5 class="card-title text-secondary fw-semibold">⚖️ Legal Help</h5>
+          <p class="text-muted small">
+            Plan awareness sessions, access advocates, and view legal aid camps.
+          </p>
+
+          {% if user.role == 'Volunteer' %}
+            <a href="{% url 'legal_info' %}" class="btn btn-outline-secondary btn-sm px-3 mb-2">
+              View Legal Info
+            </a>
+          {% else %}
+            <a href="{% url 'advocate_list' %}" class="btn btn-outline-secondary btn-sm px-3">
+              View Advocates
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- 🌸 Women Support -->
+    <div class="col-md-4 col-lg-3">
+      <div class="card shadow-sm border-0 rounded-3">
+        <div class="card-body text-center">
+          <h5 class="card-title text-danger fw-semibold">🌸 Women Support</h5>
+          <p class="text-muted small">Plan awareness sessions, donation drives, and empowerment events.</p>
+         <a href="{% url 'women_support_info' %}"
+ class="btn btn-outline-danger btn-sm px-3">
+            Manage Campaigns
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+{% block title %}Register - Sankalp{% endblock %}
+{% block content %}
+
+<style>
+    body {
+        background: linear-gradient(135deg, #e8f9e9, #f9f9e8, #eaf7fd);
+        min-height: 100vh;
+        font-family: "Poppins", sans-serif;
+    }
+
+    .register-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 90vh;
+        padding-top: 2rem;
+    }
+
+    .register-card {
+        background: rgba(255, 255, 255, 0.6);
+        border-radius: 25px;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        box-shadow: 0 4px 30px rgba(180, 220, 180, 0.2);
+        padding: 2rem 2.5rem;
+        width: 100%;
+        max-width: 500px;
+        color: #2f4f4f;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .register-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 40px rgba(150, 200, 150, 0.25);
+    }
+
+    .register-title {
+        color: #3a7c59;
+        font-weight: 700;
+    }
+
+    form p {
+        margin-bottom: 1rem;
+    }
+
+    input, select, textarea {
+        border-radius: 10px !important;
+        border: 1px solid #c5dec5 !important;
+        padding: 10px !important;
+    }
+
+    .register-btn {
+        background: linear-gradient(135deg, #7acb8b, #a6d9a6);
+        border: none;
+        color: white;
+        font-weight: 600;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+    }
+
+    .register-btn:hover {
+        background: linear-gradient(135deg, #66bb6a, #8bc34a);
+        transform: scale(1.03);
+    }
+
+    a {
+        color: #3a7c59;
+        font-weight: 600;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 576px) {
+        .register-card {
+            margin: 1rem;
+            padding: 2rem;
+        }
+    }
+</style>
+
+<div class="register-wrapper">
+    <div class="card register-card">
+        <h4 class="text-center mb-3 register-title">
+            🌿 Create Your <span class="text-success">Sankalp</span> Account
+        </h4>
+<form method="POST" novalidate>
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+        <div class="alert alert-danger">
+            {% for error in form.non_field_errors %}
+                {{ error }}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% for field in form %}
+        <div class="mb-3 position-relative">
+            <label class="form-label">{{ field.label }}</label>
+
+            {% if 'password' in field.name %}
+                <div class="input-group">
+                    {{ field }}
+                    <button type="button" class="btn btn-outline-secondary toggle-password" tabindex="-1">
+                        <i class="bi bi-eye-slash"></i>
+                    </button>
+                </div>
+            {% else %}
+                {{ field }}
+            {% endif %}
+
+            {% if field.errors %}
+                <div class="text-danger small mt-1">
+                    {% for error in field.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    {% endfor %}
+
+    <button class="btn register-btn w-100 mt-3 py-2">Register</button>
+</form>
+
+<!-- Bootstrap Icons for the eye -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+<script>
+    document.querySelectorAll('.toggle-password').forEach(button => {
+        button.addEventListener('click', function () {
+            const input = this.previousElementSibling;
+            const icon = this.querySelector('i');
+
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.replace('bi-eye-slash', 'bi-eye');
+            } else {
+                input.type = 'password';
+                icon.classList.replace('bi-eye', 'bi-eye-slash');
+            }
+        });
+    });
+</script>
+
+{% endblock %}

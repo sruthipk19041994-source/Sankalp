@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block title %}My Education Request{% endblock %}
+{% block content %}
+<style>
+  .education-container {
+    max-width: 800px;
+    margin: 50px auto;
+  }
+  .education-card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    padding: 30px;
+    background: #fefefe;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .education-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  }
+  .education-card p {
+    font-size: 1rem;
+    margin-bottom: 12px;
+  }
+  .badge-status {
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+  }
+  .badge-approved { background-color: #198754; color: #fff; }
+  .badge-rejected { background-color: #dc3545; color: #fff; }
+  .badge-pending { background-color: #ffc107; color: #212529; }
+  a.apply-link {
+    color: #0d6efd;
+    font-weight: 500;
+    text-decoration: underline;
+  }
+  a.apply-link:hover {
+    color: #0a58ca;
+  }
+</style>
+
+<div class="education-container">
+  <h2 class="text-center fw-bold text-primary mb-4">🎓 My Education Request</h2>
+  <hr class="mb-4">
+
+  {% if education_request %}
+    <div class="education-card">
+      <p><strong>Name:</strong> {{ education_request.full_name }}</p>
+      <p><strong>Age:</strong> {{ education_request.age }}</p>
+      <p><strong>Education Level:</strong> {{ education_request.education_level }}</p>
+      <p><strong>Reason:</strong> {{ education_request.reason }}</p>
+      <p><strong>Status:</strong>
+        {% if education_request.status == 'Approved' %}
+          <span class="badge-status badge-approved">{{ education_request.status }}</span>
+        {% elif education_request.status == 'Rejected' %}
+          <span class="badge-status badge-rejected">{{ education_request.status }}</span>
+        {% else %}
+          <span class="badge-status badge-pending">{{ education_request.status }}</span>
+        {% endif %}
+      </p>
+    </div>
+  {% else %}
+    <p class="text-center text-muted mt-4">
+      No request submitted yet. 
+      <a href="{% url 'education_request' %}" class="apply-link">Click here</a> to apply.
+    </p>
+  {% endif %}
+</div>
+{% endblock %}

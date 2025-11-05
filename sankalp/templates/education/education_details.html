@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}Education Request Details - Sankalp{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="text-center fw-bold text-primary mb-4">📄 Education Request Details</h2>
+  <hr class="w-25 mx-auto mb-4">
+
+  <div class="card shadow p-4">
+    <h5 class="fw-bold">{{ education_request.subject }}</h5>
+    <p><strong>Description:</strong> {{ education_request.description }}</p>
+    <p><strong>Location:</strong> {{ education_request.location }}</p>
+    <p><strong>Date Submitted:</strong> {{ education_request.created_at|date:"M d, Y" }}</p>
+
+    <hr>
+    <p><strong>Status:</strong>
+      {% if education_request.status == 'Pending' %}
+        <span class="badge bg-warning text-dark">Pending</span>
+      {% elif education_request.status == 'Approved' %}
+        <span class="badge bg-success">Approved</span>
+      {% elif education_request.status == 'Rejected' %}
+        <span class="badge bg-danger">Rejected</span>
+      {% else %}
+        <span class="badge bg-secondary">Unknown</span>
+      {% endif %}
+    </p>
+
+    {% if education_request.remarks %}
+      <p><strong>Remarks:</strong> {{ education_request.remarks }}</p>
+    {% endif %}
+  </div>
+
+  <div class="text-center mt-4">
+    <a href="{% url 'education_info' %}" class="btn btn-outline-secondary">Back</a>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}Request Education Support{% endblock %}
+{% block content %}
+<style>
+  .request-container {
+    max-width: 600px;
+    margin: 50px auto;
+  }
+  .request-card {
+    border: none;
+    border-radius: 15px;
+    padding: 30px;
+    background: #fdfdfd;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .request-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  }
+  h2 {
+    font-size: 1.9rem;
+  }
+  .btn-submit {
+    border-radius: 10px;
+    font-weight: 600;
+    transition: all 0.3s;
+  }
+  .btn-submit:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+  label {
+    font-weight: 500;
+  }
+  input, select, textarea {
+    border-radius: 8px;
+    border: 1px solid #ced4da;
+    padding: 10px;
+  }
+</style>
+
+<div class="request-container">
+  <h2 class="text-center fw-bold text-primary mb-4">🎓 Education Support Request</h2>
+  <hr class="mb-4">
+  <form method="POST" enctype="multipart/form-data" class="request-card">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <div class="text-center mt-3">
+      <button type="submit" class="btn btn-success px-4 btn-submit">Submit Request</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

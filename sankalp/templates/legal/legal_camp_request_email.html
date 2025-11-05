@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>New Legal Camp Request</title>
+  </head>
+  <body style="font-family: Arial, sans-serif; color:#333; background:#f9f9f9; padding:20px;">
+    <div style="max-width:600px; margin:auto; background:white; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.1); padding:20px;">
+      <h2 style="color:#b30000; text-align:center;">🧾 New Legal Awareness Camp Request</h2>
+      <p>Dear <strong>{{ advocate.username }}</strong>,</p>
+      <p>
+        A new <strong>Legal Awareness Camp</strong> has been requested by one of the volunteers.
+        Please review the details below:
+      </p>
+
+      <table style="width:100%; border-collapse:collapse; margin:20px 0;">
+        <tr>
+          <td style="padding:8px; border:1px solid #ddd;"><strong>Title</strong></td>
+          <td style="padding:8px; border:1px solid #ddd;">{{ camp.title }}</td>
+        </tr>
+        <tr>
+          <td style="padding:8px; border:1px solid #ddd;"><strong>Location</strong></td>
+          <td style="padding:8px; border:1px solid #ddd;">{{ camp.location }}</td>
+        </tr>
+        <tr>
+          <td style="padding:8px; border:1px solid #ddd;"><strong>Proposed Date</strong></td>
+          <td style="padding:8px; border:1px solid #ddd;">{{ camp.proposed_date }}</td>
+        </tr>
+        <tr>
+          <td style="padding:8px; border:1px solid #ddd;"><strong>Proposed  Time</strong></td>
+          <td style="padding:8px; border:1px solid #ddd;">{{ camp.proposed_time }}</td>
+        </tr>
+      </table>
+
+      <p>
+        You can log in to your <strong>Advocate Dashboard</strong> in Sankalp to approve or reject this request.
+      </p>
+
+      <div style="text-align:center; margin-top:25px;">
+        {% if camp.status == "Approved" %}
+          <button style="background:#ccc; color:#666; border:none; padding:10px 20px; border-radius:6px; cursor:not-allowed;">
+            ✅ Already Approved
+          </button>
+        {% else %}
+          <a href="{{ approval_link }}" style="background:#28a745; color:white; text-decoration:none; padding:10px 20px; border-radius:6px;">
+            ✅ Approve Request
+          </a>
+        {% endif %}
+      </div>
+
+      <p style="margin-top:25px; font-size:14px; color:#555;">
+        — <strong>Sankalp Legal Division</strong><br />
+        <em>Empowering Justice for Every Heart</em>
+      </p>
+    </div>
+  </body>
+</html>
