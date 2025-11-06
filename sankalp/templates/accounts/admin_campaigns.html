@@ -20,6 +20,7 @@
             <tr>
               <th>ID</th>
               <th>Beneficiary</th>
+              <th>Volunteer</th>
               <th>Status</th>
               <th>Forwarded To</th>
               <th>Date</th>
@@ -30,6 +31,8 @@
             <tr>
               <td>{{ edu.id }}</td>
               <td>{{ edu.beneficiary }}</td>
+              <td>{{ edu.volunteer.username }}</td>
+
               <td>
                 <span class="badge 
                   {% if edu.status == 'Pending' %}bg-warning
@@ -102,46 +105,43 @@
     </div>
   </div>
 
-  <!-- ⚖️ Legal -->
-  <div class="card shadow-sm border-0 mb-4">
-    <div class="card-body">
-      <h5 class="fw-bold text-primary mb-3">⚖️ Legal Requests</h5>
-      {% if legal_campaigns %}
-      <div class="table-responsive">
-        <table class="table table-striped align-middle">
-          <thead class="table-light">
-            <tr>
-              <th>Title</th>
-              <th>Beneficiary</th>
-              <th>Lawyer Assigned</th>
-              <th>Status</th>
-              <th>Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for legal in legal_campaigns %}
-            <tr>
-              <td>{{ legal.title }}</td>
-              <td>{{ legal.beneficiary }}</td>
-              <td>{{ legal.lawyer.username|default:"—" }}</td>
-              <td>
-                <span class="badge 
-                  {% if legal.status == 'Pending' %}bg-warning text-dark
-                  {% elif legal.status == 'Approved' %}bg-success
-                  {% elif legal.status == 'Rejected' %}bg-danger
-                  {% else %}bg-info text-dark{% endif %}">{{ legal.status }}</span>
-              </td>
-              <td>{{ legal.created_at|date:"d M Y" }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-      {% else %}
-      <p class="text-muted">No legal campaigns available.</p>
-      {% endif %}
-    </div>
-  </div>
+ <h5 class="fw-bold text-primary mb-3">⚖️ Legal Requests</h5>
+{% if legal_campaigns %}
+<div class="table-responsive">
+  <table class="table table-striped align-middle">
+    <thead class="table-light">
+      <tr>
+        <th>Title</th>
+        <th>Volunteer Requested</th>
+        <th>Status</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for legal in legal_campaigns %}
+      <tr>
+        <td>{{ legal.title }}</td>
+        <td>{{ legal.requested_by.username|default:"—" }}</td>
+        <td>
+          <span class="badge 
+            {% if legal.status == 'Pending' %}bg-warning text-dark
+            {% elif legal.status == 'Approved' %}bg-success
+            {% elif legal.status == 'Rejected' %}bg-danger
+            {% elif legal.status == 'Scheduled' %}bg-info text-dark
+            {% elif legal.status == 'Completed' %}bg-secondary
+            {% endif %}">
+            {{ legal.status }}
+          </span>
+        </td>
+        <td>{{ legal.created_at|date:"d M Y" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<p class="text-muted">No legal campaigns available.</p>
+{% endif %}
 
   <!-- 🌸 Women Support -->
   <div class="card shadow-sm border-0 mb-4">
@@ -153,7 +153,6 @@
           <thead class="table-light">
             <tr>
               <th>Title</th>
-              <th>Beneficiary</th>
               <th>Volunteer</th>
               <th>Status</th>
               <th>Date</th>
@@ -163,7 +162,6 @@
             {% for ws in women_support_campaigns %}
             <tr>
               <td>{{ ws.title }}</td>
-              <td>{{ ws.beneficiary }}</td>
               <td>{{ ws.volunteer.username|default:"—" }}</td>
               <td>
                 <span class="badge 

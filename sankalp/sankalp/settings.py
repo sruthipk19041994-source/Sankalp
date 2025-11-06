@@ -162,3 +162,7 @@ CRONJOBS = [
     # runs daily at 9 AM
 ]
 ALLOWED_HOSTS = ['sruthi123.pythonanywhere.com', '127.0.0.1', 'localhost']
+
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/dashboard/'
+LOGOUT_REDIRECT_URL = '/login/'

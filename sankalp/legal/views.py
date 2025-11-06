@@ -160,6 +160,9 @@ class UpdateCampStatusView(LoginRequiredMixin, View):
 
         if status in ['Approved', 'Rejected']:
             camp.status = status
+            # ✅ Correct assignment
+            if not camp.assigned_advocate:
+                camp.assigned_advocate = request.user
             camp.save()
 
             subject = f"⚖️ Legal Camp {status}: {camp.title}"
@@ -170,13 +173,14 @@ class UpdateCampStatusView(LoginRequiredMixin, View):
             })
             send_email_async(subject, html_message, [camp.requested_by.email])
 
-            messages.success(request, f"✅ '{camp.title}' marked as {status}.")
+            messages.success(request, f"✅ '{camp.title}' marked as {status}. Advocate assigned.")
         else:
             messages.error(request, "Invalid status update.")
 
         return redirect('advocate_dashboard')
 
 
+# ✅ Approve from Email
 # ✅ Approve from Email
 class ApproveLegalCampView(View):
     template_name = 'legal/approve_from_email.html'
@@ -189,22 +193,30 @@ class ApproveLegalCampView(View):
 
     def post(self, request, camp_id):
         camp = get_object_or_404(LegalAwarenessCamp, id=camp_id)
+
         if camp.status != 'Approved':
             camp.status = 'Approved'
+
+            # ✅ Save advocate properly
+            if request.user.is_authenticated and hasattr(request.user, 'role') and request.user.role == 'Advocate':
+                camp.assigned_advocate = request.user
+            else:
+                # Email approval fallback (anonymous)
+                first_advocate = Profile.objects.filter(role='Advocate').first()
+                if first_advocate:
+                    camp.assigned_advocate = first_advocate
+
             camp.save()
 
             subject = f"✅ Legal Camp Approved: {camp.title}"
             html_message = render_to_string('legal/legal_camp_status_update_mail.html', {
                 'camp': camp,
                 'status': 'Approved',
-                'advocate': 'Email Approval',
+                'advocate': camp.assigned_advocate or 'Email Approval',
             })
             send_email_async(subject, html_message, [camp.requested_by.email])
 
         return render(request, self.template_name, {'camp': camp, 'approved_now': True})
-
-
-# 🗓️ Schedule Legal Camp
 
 # 📰 Article List (Visible to all)
 class LegalArticleListView(LoginRequiredMixin, View):
